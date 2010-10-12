@@ -8,12 +8,12 @@ reg [23:0] test_vector = 24'h888888;
 
 wire [23:0] data_out;
 wire [4:0] count;
-wire data_rdy, lrck, bck, sck;
+wire lrck, bck, sck;
  
 initial begin
   $dumpfile ("i2s_tb.vcd");
   $dumpvars (1, i2s_tb);
-  $monitor ("mck=%b,sck=%b,bck=%b,lrck=%b,data_in=%b,data_out=%h,count=%d,data_rdy=%b,test_vector=%h", mck, sck, bck, lrck, data_in, data_out, count, data_rdy, test_vector);
+  $monitor ("mck=%b,sck=%b,bck=%b,lrck=%b,data_in=%b,data_out=%h,test_vector=%h", mck, sck, bck, lrck, data_in, data_out, test_vector);
   mck = 0;
   reset = 1;
   test_vector = 24'h888888;
@@ -22,8 +22,11 @@ initial begin
   //#6 data_in = 1;
   #4 reset = 0;
   #1030 test_vector = 24'hF0F0F0;
+  #1024 test_vector = 24'h1f3af0;
+  #1024 test_vector = 24'h123456;
+  #1024 test_vector = 24'h612345;
   //#120 data_in = 0;
-  #2400 $finish;
+  #1024 $finish;
 end
 
 // Generate Main Clk 
@@ -51,6 +54,6 @@ end
 
 clk_div c0(reset, mck, sck, bck, lrck);
  
-i2s_recv r0(lrck,bck,data_in,data_out, count, data_rdy);
+i2s_recv r0(lrck,bck,data_in,data_out);
  
 endmodule

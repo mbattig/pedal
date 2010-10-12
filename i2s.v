@@ -1,40 +1,27 @@
+// must add reset
+// clear data rdy line???
+module i2s_recv(lrck, bck, data_in, data_out);
 
-module i2s_recv(lrck, bck, data_in, data, count, rdy);
-  input  mck, lrck, bck, data_in;
-  output [23:0] data;
-  output [4:0] count;
-  output rdy;
+  input  lrck, bck, data_in;
+  output [23:0] data_out;
+
   wire lrck, bck, data_in;
-  reg [23:0] data, internal;
-  reg [4:0] count;
-  reg rdy;
-
-  // initialize outputs
-  initial begin
-    data = 24'h00000;
-    count = 5'b00000;
-    rdy = 1'b0;
-  end
-
-
+  reg [23:0] data_out;// = 24'h00000;
+  reg [23:0] internal = 24'h00000; 
+  reg [4:0] count = 5'b00000;
+  
   // shift in data from serial bus.  
-  // If we have 24 bits, signal data rdy and output
+  // when we have received 24 bits clock this data to data_out
   always @ (posedge bck) begin
     internal = internal << 1;
     internal[0] = data_in;
     count = count + 1;
-    if (count > 23) begin
-      rdy = 1'b1;
-    end
+    if (count == 24) data_out = internal; // shifted in 24 bits, so clcok to output... if i2s might be able to switch to 25 to be compliant???
   end
   
-  // when data rdy output data
-  always @ (posedge rdy) data = internal;
-  
-  // clear data rdy and cout signals when  frame is over.
+  // clear count signal when frame is over.
   always @ (posedge lrck or negedge lrck) begin
     count = 5'b00000;
-    rdy = 1'b0;
   end
 
 endmodule
