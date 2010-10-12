@@ -5,13 +5,13 @@
 
 module i2s_tb;
  
-reg mck, lrck, data_in, bck;
+reg mck, data_in;
 reg [23:0] test_vector = 24'h888888;
 
 
 wire [23:0] data_out;
 wire [4:0] count;
-wire data_rdy;
+wire data_rdy, lrck, bck, sck;
  
 initial begin
   $dumpfile ("i2s_tb.vcd");
@@ -28,8 +28,7 @@ end
 
 // Generate Main Clk 
 always begin
-  #1 mck = !mck;
-  bck = mck;    
+  #1 mck = !mck;    
 end
 
 always @ (posedge lrck or negedge lrck) begin
