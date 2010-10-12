@@ -12,7 +12,7 @@ wire scki, bck, lrck;
 initial begin
     $dumpfile ("clk_div_tb.vcd");
     $dumpvars (1, clk_div_tb);
-    $monitor ("mck=%b, reset=%b, scki=%b, bck=%b,lrck=%b", mck, reset, scki, bck, lrck);
+    $monitor ("mck=%b, scki=%b, bck=%b,lrck=%b", mck, scki, bck, lrck);
     mck = 0;
     reset = 1;
     #4 reset = 0;
@@ -21,7 +21,7 @@ initial begin
     #50 reset = 1;
     #4  reset =0;
     //#50000 $finish;
-    #4000 $finish;
+    #40000 $finish;
 end
 
 // Generate Main Clk 
@@ -29,6 +29,6 @@ always begin
     #1 mck = !mck;
 end
 
-clk_div c0(reset, mck, scki, bck, lrck);//,count);
+clk_div c0( mck, scki, bck, lrck);//,reset);
  
 endmodule
