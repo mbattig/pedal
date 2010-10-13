@@ -6,7 +6,7 @@ module i2s_recv(lrck, bck, data_in, data_out);
   output [23:0] data_out;
 
   wire lrck, bck, data_in;
-  reg [23:0] data_out;// = 24'h00000;
+  reg [23:0] data_out;
   reg [23:0] internal = 24'h00000; 
   reg [4:0] count = 5'b00000;
   
@@ -16,14 +16,9 @@ module i2s_recv(lrck, bck, data_in, data_out);
     internal = internal << 1;
     internal[0] = data_in;
     count = count + 1;
-    if (count == 24) data_out = internal; // shifted in 24 bits, so clcok to output... if i2s might be able to switch to 25 to be compliant???
+    if (count == 24) data_out = internal; // shifted in 24 bits, so clock to output... if i2s might be able to switch to 25 to be compliant???
   end
   
-  // clear count signal when frame is over.
-  always @ (posedge lrck or negedge lrck) begin
-    count = 5'b00000;
-  end
-
 endmodule
 
 // module to handle the clock division for communication.

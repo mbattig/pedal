@@ -52,7 +52,7 @@ always @ (sck) begin
 end
 
 
-clk_div c0(reset, mck, sck, bck, lrck);
+clk_div c0(mck, sck, bck, lrck);
  
 i2s_recv r0(lrck,bck,data_in,data_out);
  
