@@ -20,7 +20,7 @@ module i2s_rx(bck, lrck, data_in, data_out);
   end
   
 endmodule
-// going to be multiple driver issues...
+
 module i2s_tx (bck, lrck,data_in,data_out);
     input bck, lrck;
     input [23:0] data_in;
@@ -30,22 +30,21 @@ module i2s_tx (bck, lrck,data_in,data_out);
     wire [23:0] data_in;
 
     reg data_out;
-    reg [23:0] internal;// = 24'hf0f0f0;
+    reg [23:0] internal = 24'b0;
     reg [4:0] count = 5'b00000;
 
     // going to have multiple driver issues... maybe
-    always @ (lrck) begin
-        internal = data_in;
-        //internal=1'b0;
-    end
+    //always @ (lrck) internal = data_in;
 
     always @ (negedge bck) begin
-        data_out = internal[23];
-        internal = internal << 1;
+        if (count <= 24) begin
+            data_out = internal[23];
+            internal = internal << 1;
+        end
+        else begin
+            internal = data_in; 
+        end
         count = count + 1'b1;
-        //if (count <= 23) begin
-        //    internal = internal << 1;
-        //end
     end
 
 endmodule
