@@ -1,13 +1,13 @@
 // must add reset
 // clear data rdy line???
-module i2s_recv(lrck, bck, data_in, data_out);
+module i2s_rx(bck, lrck, data_in, data_out);
 
   input  lrck, bck, data_in;
   output [23:0] data_out;
 
   wire lrck, bck, data_in;
   reg [23:0] data_out;
-  reg [23:0] internal = 24'h00000; 
+  reg [23:0] internal; 
   reg [4:0] count = 5'b00000;
   
   // shift in data from serial bus.  
@@ -20,9 +20,39 @@ module i2s_recv(lrck, bck, data_in, data_out);
   end
   
 endmodule
+// going to be multiple driver issues...
+module i2s_tx (bck, lrck,data_in,data_out);
+    input bck, lrck;
+    input [23:0] data_in;
+    output data_out;
+
+    wire bck, lrck;
+    wire [23:0] data_in;
+
+    reg data_out;
+    reg [23:0] internal;// = 24'hf0f0f0;
+    reg [4:0] count = 5'b00000;
+
+    // going to have multiple driver issues... maybe
+    always @ (lrck) begin
+        internal = data_in;
+        //internal=1'b0;
+    end
+
+    always @ (negedge bck) begin
+        data_out = internal[23];
+        internal = internal << 1;
+        count = count + 1'b1;
+        //if (count <= 23) begin
+        //    internal = internal << 1;
+        //end
+    end
+
+endmodule
+
 
 // module to handle the clock division for communication.
-module clk_div(mck, scki, bck, lrck);//, reset);
+module clk_div(mck, scki, bck, lrck);
 
     input mck;//, reset;
     output scki, bck, lrck;
