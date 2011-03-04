@@ -2,7 +2,7 @@
 
 module i2s_tb;
  
-reg mck, data_in, reset;
+reg mck, reset;
 reg [23:0] test_vector = 24'h888888;
 
 
@@ -14,11 +14,11 @@ wire data_out;
 initial begin
   $dumpfile ("i2s_tb.vcd");
   $dumpvars (1, i2s_tb);
-  $monitor ("mck=%b,sck=%b,bck=%b,lrck=%b,data_in=%b,decoded=%h,test_vector=%h, data_out=%b", mck, sck, bck, lrck, data_in, decoded, test_vector, data_out);
+  $monitor ("mck=%b,sck=%b,bck=%b,lrck=%b,decoded=%h,test_vector=%h, data_out=%b", mck, sck, bck, lrck, decoded, test_vector, data_out);
   mck = 0;
   reset = 1;
   test_vector = 24'h888888;
-  data_in = test_vector[23];
+  //data_in = test_vector[23];
 
   //#6 data_in = 1;
   #4 reset = 0;
