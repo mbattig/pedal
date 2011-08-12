@@ -5,7 +5,7 @@
 module peddle_tb;
  
 reg mck;
-reg [23:0] sample = 24'h7fffff; // 50 %
+reg [23:0] sample = 24'hffffff; // 50 %
 
 wire out, i2s_data, lrck, bck;
  
@@ -15,7 +15,9 @@ initial begin
   $monitor ("mck=%b,bck=%b,lrck=%b,sample=%h,i2s_data=%b,pwm=%b",mck,bck,lrck,sample,i2s_data,out);
   mck = 0;
   
-  #4000 sample = 24'hffffff;
+  #4000 sample = 24'hBfffff;
+  #4000 sample = 24'h7fffff;
+  #4000 sample = 24'h3fffff;
   #4000 sample = 24'h000000;
   #4000 $finish;
 end
